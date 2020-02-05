@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+        ">
+	<aop:aspectj-autoproxy  />
+
+    <!-- 2、注解方法注入 -->
+    <context:component-scan base-package="com.njxzc"></context:component-scan>
+	<!-- 读取配置文件 -->
+	<context:property-placeholder location="classpath:jdbc.properties" />
+    
+
+	    <!-- 4、配置数据源   数据源:C3P0、durid、spring-jdbc、commons-dbcp等 -->
+    <bean id="dataSource"  class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="${jdbc.driver}"></property>
+		<property name="jdbcUrl" value="${jdbc.url}"></property>
+		<property name="user" value="${jdbc.username}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+        <property name="maxPoolSize" value="${c3p0.pool.size.max}" />
+		<property name="minPoolSize" value="${c3p0.pool.size.min}" />
+		<property name="initialPoolSize" value="${c3p0.pool.size.ini}" />
+		<property name="acquireIncrement" value="${c3p0.pool.size.increment}" /> 
+         <!-- 相关连接池信息  -->
+       
+    </bean>
+     
+
+
+
+	<!-- 实体映射类 -->
+	 <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+	        <!-- 配置数据源 -->
+	        <property name="dataSource" ref="dataSource"></property>
+	        
+	        <!-- 读取mybatis的配置文件 -->
+	        <property name="configLocation" value="classpath:mybatis-config.xml"></property>
+	        
+	        <!-- 读取映射文件 -->
+	        <property name="mapperLocations" value="classpath:com/njxzc/mapper/*.xml"></property>
+	        
+	        <!-- 别名的设置 -->
+	        <property name="typeAliasesPackage" value="com.njxzc.model"></property>
+     </bean>
+     
+     <!-- 6、mybatis的mapper代理类的配置   (代码中没有数据访问层的实现类)-->
+     <bean  class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+           <!-- sqlSessionFactory的指定 -->
+          <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+         
+           <!-- 数据访问层的包 -->
+           <property name="basePackage" value="com.njxzc.dao"></property>
+        </bean>
+
+<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+           <property name="dataSource" ref="dataSource"></property>
+     </bean>
+     
+     <tx:advice id="myAdvice" transaction-manager="transactionManager">
+         <tx:attributes>
+              <!-- 对insert开头的方法都要进行事务管理 -->
+              <tx:method name="insert*" propagation="REQUIRED"/>
+              <tx:method name="update*" propagation="REQUIRED"/>
+              <tx:method name="delete*" propagation="REQUIRED"/>
+              <tx:method name="save*" propagation="REQUIRED"/>
+              <tx:method name="query*" propagation="REQUIRED"/>
+              <tx:method name="*" propagation="REQUIRED"/>
+         </tx:attributes>
+     </tx:advice>
+	<!-- 配置User中的Dao类,使mybaties能够配置User与数据库打交道 -->
+	  <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.njxzc.dao" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+	</bean>
+	
+	<aop:config>
+      
+          <!-- 切入点的配置 -->
+          <aop:pointcut expression="execution(* com.njxzc.service..*.*(..))" id="myPointCut"/>
+          
+          <!-- 通知 -->
+          <aop:advisor advice-ref="myAdvice" pointcut-ref="myPointCut"/>
+      </aop:config>    
+      <aop:aspectj-autoproxy  proxy-target-class="true"/>
+	 <!--200*1024*1024即200M resolveLazily属性启用是为了推迟文件解析，以便捕获文件大小异常 -->
+ 
+	 <bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="209715200" />   
+		<property name="defaultEncoding" value="UTF-8" />
+		<property name="resolveLazily" value="true" />
+	</bean>
+	
+</beans>

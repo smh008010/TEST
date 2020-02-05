@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.njxzc.dao.PositionMapper">
+  <resultMap id="BaseResultMap" type="com.njxzc.model.Position">
+    <id column="poid" jdbcType="INTEGER" property="poid" />
+    <result column="poname" jdbcType="VARCHAR" property="poname" />
+    <result column="posalary" jdbcType="INTEGER" property="posalary" />
+    <result column="isDelete" jdbcType="INTEGER" property="isDelete" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    poid, poname, posalary, isDelete
+  </sql>
+  <select id="selectByExample" parameterType="com.njxzc.model.PositionExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from position
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from position
+    where poid = #{poid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from position
+    where poid = #{poid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.njxzc.model.PositionExample">
+    delete from position
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.njxzc.model.Position">
+    insert into position (poid, poname, posalary, 
+      isDelete)
+    values (#{poid,jdbcType=INTEGER}, #{poname,jdbcType=VARCHAR}, #{posalary,jdbcType=INTEGER}, 
+      #{isDelete,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.njxzc.model.Position">
+    insert into position
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="poid != null">
+        poid,
+      </if>
+      <if test="poname != null">
+        poname,
+      </if>
+      <if test="posalary != null">
+        posalary,
+      </if>
+      <if test="isDelete != null">
+        isDelete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="poid != null">
+        #{poid,jdbcType=INTEGER},
+      </if>
+      <if test="poname != null">
+        #{poname,jdbcType=VARCHAR},
+      </if>
+      <if test="posalary != null">
+        #{posalary,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.njxzc.model.PositionExample" resultType="java.lang.Long">
+    select count(*) from position
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update position
+    <set>
+      <if test="record.poid != null">
+        poid = #{record.poid,jdbcType=INTEGER},
+      </if>
+      <if test="record.poname != null">
+        poname = #{record.poname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.posalary != null">
+        posalary = #{record.posalary,jdbcType=INTEGER},
+      </if>
+      <if test="record.isDelete != null">
+        isDelete = #{record.isDelete,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update position
+    set poid = #{record.poid,jdbcType=INTEGER},
+      poname = #{record.poname,jdbcType=VARCHAR},
+      posalary = #{record.posalary,jdbcType=INTEGER},
+      isDelete = #{record.isDelete,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.njxzc.model.Position">
+    update position
+    <set>
+      <if test="poname != null">
+        poname = #{poname,jdbcType=VARCHAR},
+      </if>
+      <if test="posalary != null">
+        posalary = #{posalary,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null">
+        isDelete = #{isDelete,jdbcType=INTEGER},
+      </if>
+    </set>
+    where poid = #{poid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.njxzc.model.Position">
+    update position
+    set poname = #{poname,jdbcType=VARCHAR},
+      posalary = #{posalary,jdbcType=INTEGER},
+      isDelete = #{isDelete,jdbcType=INTEGER}
+    where poid = #{poid,jdbcType=INTEGER}
+  </update>
+</mapper>

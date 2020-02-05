@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.njxzc.dao.MenuMapper">
+  <resultMap id="BaseResultMap" type="com.njxzc.model.Menu">
+    <id column="menuId" jdbcType="INTEGER" property="menuId" />
+    <result column="menuName" jdbcType="VARCHAR" property="menuName" />
+    <result column="menuUrl" jdbcType="VARCHAR" property="menuUrl" />
+    <result column="parentId" jdbcType="INTEGER" property="parentId" />
+    <result column="menuLevel" jdbcType="INTEGER" property="menuLevel" />
+    <result column="menuDelete" jdbcType="INTEGER" property="menuDelete" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    menuId, menuName, menuUrl, parentId, menuLevel, menuDelete
+  </sql>
+  <select id="selectByExample" parameterType="com.njxzc.model.MenuExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from menu
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from menu
+    where menuId = #{menuId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from menu
+    where menuId = #{menuId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.njxzc.model.MenuExample">
+    delete from menu
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.njxzc.model.Menu">
+    insert into menu (menuId, menuName, menuUrl, 
+      parentId, menuLevel, menuDelete
+      )
+    values (#{menuId,jdbcType=INTEGER}, #{menuName,jdbcType=VARCHAR}, #{menuUrl,jdbcType=VARCHAR}, 
+      #{parentId,jdbcType=INTEGER}, #{menuLevel,jdbcType=INTEGER}, #{menuDelete,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.njxzc.model.Menu">
+    insert into menu
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="menuId != null">
+        menuId,
+      </if>
+      <if test="menuName != null">
+        menuName,
+      </if>
+      <if test="menuUrl != null">
+        menuUrl,
+      </if>
+      <if test="parentId != null">
+        parentId,
+      </if>
+      <if test="menuLevel != null">
+        menuLevel,
+      </if>
+      <if test="menuDelete != null">
+        menuDelete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="menuId != null">
+        #{menuId,jdbcType=INTEGER},
+      </if>
+      <if test="menuName != null">
+        #{menuName,jdbcType=VARCHAR},
+      </if>
+      <if test="menuUrl != null">
+        #{menuUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="menuLevel != null">
+        #{menuLevel,jdbcType=INTEGER},
+      </if>
+      <if test="menuDelete != null">
+        #{menuDelete,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.njxzc.model.MenuExample" resultType="java.lang.Long">
+    select count(*) from menu
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update menu
+    <set>
+      <if test="record.menuId != null">
+        menuId = #{record.menuId,jdbcType=INTEGER},
+      </if>
+      <if test="record.menuName != null">
+        menuName = #{record.menuName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.menuUrl != null">
+        menuUrl = #{record.menuUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parentId != null">
+        parentId = #{record.parentId,jdbcType=INTEGER},
+      </if>
+      <if test="record.menuLevel != null">
+        menuLevel = #{record.menuLevel,jdbcType=INTEGER},
+      </if>
+      <if test="record.menuDelete != null">
+        menuDelete = #{record.menuDelete,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update menu
+    set menuId = #{record.menuId,jdbcType=INTEGER},
+      menuName = #{record.menuName,jdbcType=VARCHAR},
+      menuUrl = #{record.menuUrl,jdbcType=VARCHAR},
+      parentId = #{record.parentId,jdbcType=INTEGER},
+      menuLevel = #{record.menuLevel,jdbcType=INTEGER},
+      menuDelete = #{record.menuDelete,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.njxzc.model.Menu">
+    update menu
+    <set>
+      <if test="menuName != null">
+        menuName = #{menuName,jdbcType=VARCHAR},
+      </if>
+      <if test="menuUrl != null">
+        menuUrl = #{menuUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        parentId = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="menuLevel != null">
+        menuLevel = #{menuLevel,jdbcType=INTEGER},
+      </if>
+      <if test="menuDelete != null">
+        menuDelete = #{menuDelete,jdbcType=INTEGER},
+      </if>
+    </set>
+    where menuId = #{menuId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.njxzc.model.Menu">
+    update menu
+    set menuName = #{menuName,jdbcType=VARCHAR},
+      menuUrl = #{menuUrl,jdbcType=VARCHAR},
+      parentId = #{parentId,jdbcType=INTEGER},
+      menuLevel = #{menuLevel,jdbcType=INTEGER},
+      menuDelete = #{menuDelete,jdbcType=INTEGER}
+    where menuId = #{menuId,jdbcType=INTEGER}
+  </update>
+  <!-- 根据父级id查询菜单 -->
+  <select id="querybyparentid" parameterType="Integer" resultType="com.njxzc.model.Menu">
+     SELECT * from menu where 1=1
+     <if test="_parameter != null">
+     and parentId=#{parentId}
+     </if>
+     <if test="_parameter == null">
+     and parentId is null
+     </if>
+  </select>
+</mapper>

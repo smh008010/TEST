@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.njxzc.dao.IndrugMapper">
+  <resultMap id="BaseResultMap" type="com.njxzc.model.Indrug">
+    <id column="indrugid" jdbcType="INTEGER" property="indrugid" />
+    <result column="drugid" jdbcType="INTEGER" property="drugid" />
+    <result column="date" jdbcType="TIMESTAMP" property="date" />
+    <result column="innumber" jdbcType="INTEGER" property="innumber" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    indrugid, drugid, date, innumber, state
+  </sql>
+  <select id="selectByExample" parameterType="com.njxzc.model.IndrugExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from indrug
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from indrug
+    where indrugid = #{indrugid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from indrug
+    where indrugid = #{indrugid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.njxzc.model.IndrugExample">
+    delete from indrug
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.njxzc.model.Indrug">
+    insert into indrug (indrugid, drugid, date, 
+      innumber, state)
+    values (#{indrugid,jdbcType=INTEGER}, #{drugid,jdbcType=INTEGER}, #{date,jdbcType=TIMESTAMP}, 
+      #{innumber,jdbcType=INTEGER}, #{state,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.njxzc.model.Indrug">
+    insert into indrug
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="indrugid != null">
+        indrugid,
+      </if>
+      <if test="drugid != null">
+        drugid,
+      </if>
+      <if test="date != null">
+        date,
+      </if>
+      <if test="innumber != null">
+        innumber,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="indrugid != null">
+        #{indrugid,jdbcType=INTEGER},
+      </if>
+      <if test="drugid != null">
+        #{drugid,jdbcType=INTEGER},
+      </if>
+      <if test="date != null">
+        #{date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="innumber != null">
+        #{innumber,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.njxzc.model.IndrugExample" resultType="java.lang.Long">
+    select count(*) from indrug
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update indrug
+    <set>
+      <if test="record.indrugid != null">
+        indrugid = #{record.indrugid,jdbcType=INTEGER},
+      </if>
+      <if test="record.drugid != null">
+        drugid = #{record.drugid,jdbcType=INTEGER},
+      </if>
+      <if test="record.date != null">
+        date = #{record.date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.innumber != null">
+        innumber = #{record.innumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.state != null">
+        state = #{record.state,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update indrug
+    set indrugid = #{record.indrugid,jdbcType=INTEGER},
+      drugid = #{record.drugid,jdbcType=INTEGER},
+      date = #{record.date,jdbcType=TIMESTAMP},
+      innumber = #{record.innumber,jdbcType=INTEGER},
+      state = #{record.state,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.njxzc.model.Indrug">
+    update indrug
+    <set>
+      <if test="drugid != null">
+        drugid = #{drugid,jdbcType=INTEGER},
+      </if>
+      <if test="date != null">
+        date = #{date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="innumber != null">
+        innumber = #{innumber,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+    </set>
+    where indrugid = #{indrugid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.njxzc.model.Indrug">
+    update indrug
+    set drugid = #{drugid,jdbcType=INTEGER},
+      date = #{date,jdbcType=TIMESTAMP},
+      innumber = #{innumber,jdbcType=INTEGER},
+      state = #{state,jdbcType=INTEGER}
+    where indrugid = #{indrugid,jdbcType=INTEGER}
+  </update>
+  
+  <resultMap type="com.njxzc.model.Indrug" id="indrugmap">
+    <id column="indrugid" jdbcType="INTEGER" property="indrugid" />
+    <result column="drugid" jdbcType="INTEGER" property="drugid" />
+    <result column="date" jdbcType="TIMESTAMP" property="date" />
+    <result column="innumber" jdbcType="INTEGER" property="innumber" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <association property="drug" javaType="com.njxzc.model.Drug">
+      <id column="drugid1" jdbcType="INTEGER" property="drugid" />
+      <result column="drugname" jdbcType="VARCHAR" property="drugname" />
+      <result column="number" jdbcType="INTEGER" property="number" />
+    </association>
+  </resultMap>
+  
+  <select id="queryall" resultMap="indrugmap">
+  SELECT * from indrug,drug WHERE indrug.drugid=drug.drugid
+  </select>
+  
+  <select id="queryoneid" resultMap="indrugmap">
+  SELECT * from indrug,drug WHERE indrug.drugid=drug.drugid and indrugid=#{indrugid}
+  </select>
+  
+ 
+</mapper>
